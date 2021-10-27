@@ -7,7 +7,12 @@ import "./Navbar.css";
 // Images
 import Temple from "../assets/temple.svg";
 
+// All imports
+import { useLogout } from "../hooks/useLogout";
+
 export default function Navbar() {
+  const { logout, isPending } = useLogout();
+
   return (
     <nav className="navbar">
       <ul>
@@ -22,7 +27,16 @@ export default function Navbar() {
           <Link to="/signup">Signup</Link>
         </li>
         <li>
-          <button className="btn">Logout</button>
+          {!isPending && (
+            <button className="btn" onClick={logout}>
+              Logout
+            </button>
+          )}
+          {isPending && (
+            <button className="btn" disabled>
+              Logging Out
+            </button>
+          )}
         </li>
       </ul>
     </nav>
