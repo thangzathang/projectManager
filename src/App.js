@@ -5,15 +5,17 @@ import { useAuthContext } from "./hooks/useAuthContext";
 // Styles
 import "./App.css";
 
-// Pages and components
+// Pages
 import Dashboard from "./pages/dashboard/Dashboard";
 import Create from "./pages/create/Create";
 import Login from "./pages/login/Login";
 import Project from "./pages/project/Project";
 import Signup from "./pages/signup/Signup";
 
+// Components
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import OnlineUsers from "./components/OnlineUsers";
 
 function App() {
   const { user, authIsReady } = useAuthContext();
@@ -48,6 +50,7 @@ function App() {
               </Route>
             </Switch>
           </div>
+          {user && <OnlineUsers />}
         </BrowserRouter>
       )}
     </div>

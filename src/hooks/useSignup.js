@@ -23,8 +23,8 @@ export const useSignup = () => {
       }
 
       // Upload user thumbnail to fireStore storage bucket
-      // a. The thumbnails folder won't initially exist but Firestore will create by itself.
-      // b. every user will have their own user thumbnail folder with their own image. Thus the UID.
+      //    a. The thumbnails folder won't initially exist but Firestore will create by itself.
+      //    b. every user will have their own user thumbnail folder with their own image. Thus the UID.
       const uploadPath = `thumbnails/${res.user.uid}/${thumbnail.name}`;
       const img = await projectStorage.ref(uploadPath).put(thumbnail);
       const imgUrl = await img.ref.getDownloadURL();
@@ -42,7 +42,7 @@ export const useSignup = () => {
         photoURL: imgUrl,
       });
 
-      // dispatch login action
+      // dispatch login action - This will give Auth thus user access to Create and Dashboard
       dispatch({ type: "LOGIN", payload: res.user });
 
       // No problem and No loading/ pending.
