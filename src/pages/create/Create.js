@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Select from "react-select";
+import { useCollection } from "../../hooks/useCollection";
 
-// styles
 import "./Create.css";
 
 export default function Create() {
-  // form field values
+  const { documents } = useCollection("users");
+  const [users, setUsers] = useState([]);
+
+  // State for the form fields
   const [projectName, setProjectName] = useState("");
   const [projectDetails, setProjectDetails] = useState("");
   const [projectDueDate, setProjectDueDate] = useState("");
 
   const [category, setCategory] = useState("");
   const [assignedUsers, setAssignedUsers] = useState([]);
+
+  // These are the categories for the select field
+  const categories = [
+    { value: "development", label: "Development" },
+    { value: "design", label: "Design" },
+    { value: "sales", label: "Sales" },
+    { value: "marketing", label: "Marketing" },
+  ];
+
+  //
+  useEffect(() => {
+    if (documents) {
+      const options = documents.map((user) => {
+        return { value: user, label: user.displayName };
+      });
+      setUsers(options);
+    }
+  }, [documents]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,11 +58,12 @@ export default function Create() {
         </label>
         <label>
           <span>Project category:</span>
-          {/* select here later */}
+          <Select onChange={(option) => setCategory(option)} options={categories} />
         </label>
         <label>
           <span>Assign to:</span>
-          {/* select here later */}
+          {/* isMulti allows us to select multiple users */}
+          <Select onChange={(option) => setAssignedUsers(option)} options={users} isMulti />
         </label>
 
         <button className="btn">Add Project</button>
