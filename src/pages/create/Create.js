@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useCollection } from "../../hooks/useCollection";
+import { timestamp } from "../../firebase/config";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFirestore } from "../../hooks/useFirestore";
+import { useHistory } from "react-router-dom";
 
 import "./Create.css";
 
 export default function Create() {
+  const history = useHistory();
+  const { addDocument, response } = useFirestore("projects");
   const { documents } = useCollection("users");
   const [users, setUsers] = useState([]);
+  const { user } = useAuthContext();
 
   // State for the form fields
   const [projectName, setProjectName] = useState("");
@@ -25,7 +32,7 @@ export default function Create() {
     { value: "marketing", label: "Marketing" },
   ];
 
-  //
+  // We need an options of users (array) for the select field for Assign users/
   useEffect(() => {
     if (documents) {
       const options = documents.map((user) => {
@@ -39,6 +46,7 @@ export default function Create() {
     e.preventDefault();
     setFormError(null);
 
+    // Input checking
     if (!category) {
       setFormError("Please select a project category");
       return;
@@ -49,7 +57,34 @@ export default function Create() {
       return;
     }
 
-    console.log(projectName, projectDetails, projectDueDate);
+    const assignedUsersList = assignedUsers.map((user) => {
+      return {
+        displayName: user.value.displayName,
+        photoURL: user.value.photoURL,
+        id: user.value.id,
+      };
+    });
+
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
+    };
+
+    const project = {
+      name: projectName,
+      details: projectDetails,
+      category: category.value,
+      dueDate: timestamp.fromDate(new Date(projectDueDate)),
+      comments: [],
+      createdBy,
+      assignedUsersList,
+    };
+
+    await addDocument(project);
+    if (!response.error) {
+      history.push("/");
+    }
   };
 
   return (
