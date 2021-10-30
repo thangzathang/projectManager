@@ -11,7 +11,7 @@ export const useDocument = (collection, id) => {
 
     const unsubscribe = ref.onSnapshot(
       (snapshot) => {
-        // need to make sure the doc exists & has data
+        // Check that the snapshot has data.
         if (snapshot.data()) {
           setDocument({ ...snapshot.data(), id: snapshot.id });
           setError(null);
@@ -20,7 +20,7 @@ export const useDocument = (collection, id) => {
         }
       },
       (err) => {
-        console.log(err.message);
+        console.log(err);
         setError("failed to get document");
       }
     );
