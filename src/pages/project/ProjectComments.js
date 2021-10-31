@@ -4,8 +4,8 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 
 export default function ProjectComments({ project }) {
-  const { updateDocument, response } = useFirestore("projects");
   const { user } = useAuthContext();
+  const { updateDocument, response } = useFirestore("projects");
   const [newComment, setNewComment] = useState("");
 
   const handleSubmit = async (e) => {
@@ -22,9 +22,7 @@ export default function ProjectComments({ project }) {
     await updateDocument(project.id, {
       comments: [...project.comments, commentToAdd],
     });
-
     if (!response.error) {
-      // We are just resetting it so the next comments can be made.
       setNewComment("");
     }
   };
@@ -36,7 +34,7 @@ export default function ProjectComments({ project }) {
       <form className="add-comment" onSubmit={handleSubmit}>
         <label>
           <span>Add new comment:</span>
-          <textarea required onChange={(e) => setNewComment(e.target.value)} value={newComment}></textarea>
+          <textarea onChange={(e) => setNewComment(e.target.value)} value={newComment}></textarea>
         </label>
         <button className="btn">Add Comment</button>
       </form>
