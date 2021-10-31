@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { timestamp } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFirestore } from "../../hooks/useFirestore";
 
-export default function ProjectComments() {
+export default function ProjectComments({ project }) {
+  const { updateDocument, response } = useFirestore("projects");
   const { user } = useAuthContext();
   const [newComment, setNewComment] = useState("");
 
@@ -17,7 +19,14 @@ export default function ProjectComments() {
       id: Math.random(),
     };
 
-    console.log(commentToAdd);
+    await updateDocument(project.id, {
+      comments: [...project.comments, commentToAdd],
+    });
+
+    if (!response.error) {
+      // We are just resetting it so the next comments can be made.
+      setNewComment("");
+    }
   };
 
   return (
