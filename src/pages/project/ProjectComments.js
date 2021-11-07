@@ -40,9 +40,7 @@ export default function ProjectComments({ project }) {
                 <Avatar src={comment.photoURL} />
                 <p>{comment.displayName}</p>
               </div>
-              <div className="comment-date">
-                <p>{comment.createdAt.toDate()}</p>
-              </div>
+              <div className="comment-date">{/* work on this later*/}</div>
               <div className="comment-content">
                 <p>{comment.content}</p>
               </div>
