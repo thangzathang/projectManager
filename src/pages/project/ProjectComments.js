@@ -41,7 +41,7 @@ export default function ProjectComments({ project }) {
                 <p>{comment.displayName}</p>
               </div>
               <div className="comment-date">
-                <p>date here</p>
+                <p>{comment.createdAt.toDate()}</p>
               </div>
               <div className="comment-content">
                 <p>{comment.content}</p>
